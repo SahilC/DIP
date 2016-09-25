@@ -6,8 +6,8 @@ element_close = cv2.getStructuringElement(cv2.MORPH_RECT,( 50,50 ),( 0, 0))
 # im = cv2.imread('soccer_1.png')
 # cv2.imshow("XYZZZ",im[len(im)-100:len(im),1:100])
 
-for i in xrange(1,10):
-    im = cv2.imread('soccer_'+str(i)+'.png')
+for i in xrange(1,11):
+    im = cv2.imread('soccer_'+str(i)+'.png',dtype=np.uint8)
 
     hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
     lower_green = np.array([37,16,70])
