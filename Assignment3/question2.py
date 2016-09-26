@@ -30,7 +30,8 @@ def find_directional_gradient(im, kernel, axis,bias):
     return temp2
 
 for i in xrange(1,6):
-    im = cv2.imread('building_'+str(i)+'.jpg',0)
+    im_original = cv2.imread('building_'+str(i)+'.jpg')
+    im = cv2.cvtColor(im_original,cv2.COLOR_BGR2GRAY)
     im = cv2.equalizeHist(im)
     # gray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
     # edges = cv2.Canny(gray,70,100,apertureSize = 3)
@@ -70,6 +71,7 @@ for i in xrange(1,6):
     #cv2.imshow("XYYZZ",temp2)
     # temp4 = cv2.bitwise_and(im,im,mask = temp4)
     temp2 = cv2.resize(im,(1000,700))
+    temp4 = cv2.resize(im_original,(1000,700))
     # blur = cv2.blur(temp2,(3,3))
     # retval, thres = cv2.threshold(blur, 0, 256, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
     # thres = cv2.bitwise_not(thres)
@@ -112,12 +114,12 @@ for i in xrange(1,6):
         area = cv2.contourArea(cnt)
         x,y,w,h = cv2.boundingRect(cnt)
         if h > w and area > 100:
-            cv2.rectangle(temp2,(x,y),(x+w,y+h),0,2)
+            cv2.rectangle(temp4,(x,y),(x+w,y+h),(255,0,0),2)
     # edges = auto_canny(temp2)
     # temp3 = np.zeros((im.shape[0],im.shape[1]),dtype=np.uint8)
     # retval, labels = cv2.connectedComponents(edges)
     # print labels
     # output = np.zeros_like(labels, dtype=np.uint8)
     # cv2.normalize(labels, output, 0 , 255, cv2.NORM_MINMAX, dtype=cv2.CV_8U)
-    cv2.imshow("XYYZZZ",temp2)
+    cv2.imshow("XYYZZZ",temp4)
     cv2.waitKey(0)
