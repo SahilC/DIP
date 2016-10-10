@@ -1,10 +1,14 @@
 import cv2
 import numpy as np
+import math
 # import matplotlib.pyplot as plt
 
 def threshold(im , threshold = 150):
 	im[im > threshold] = 255
 	im[im < threshold] = 0
+
+def getEccentricity(mu):
+    return math.sqrt( ( mu['m20'] - mu['m02'] ) *  ( mu['m20'] - mu['m02'] )  + 4 * mu['m11'] * mu['m11'])
 
 def otsu_threshold(im):
 	vals = im.flatten()
@@ -30,7 +34,7 @@ def sliding_window(image, stepSize, windowSize):
 			yield (x, y, image[y:y + windowSize[1], x:x + windowSize[0]])
 
 def adaptiveThreshold(im):
-	new_im = np.zeros(im.shape)
+	new_im = np.zeros(im.shape,np.uint8)
 	count = 0
 	wh = 10
 	ww = 10
@@ -96,11 +100,20 @@ for i in xrange(1,4):
 	im = cv2.blur(im,(5,5))
 	im = cv2.resize(im,(500,700))
 	im = adaptiveThreshold(im)
-	# _, th = cv2.threshold(im, 0, 256,cv2.THRESH_OTSU)
-	# t = otsu_threshold(im)
-	# threshold(im,t)
-	# threshold(im)
-	# th = cv2.adaptiveThreshold(im,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+	thres = cv2.bitwise_not(im)
+	_,contours,_ = cv2.findContours(thres.copy(),cv2.RETR_LIST,cv2.CHAIN_APPROX_NONE)
+	new_im = np.zeros(im.shape,np.uint8)
+	for cnt in contours:
+		# M = cv2.moments(cnt)
+		# e = getEccentricity(M)
+		x,y,w,h = cv2.boundingRect(cnt)
+		if float(w)/h > 1:
+			cv2.drawContours(new_im, [cnt], -1,255,1)
 
-	cv2.imshow("XYYZZZ",im)
+	dilate = cv2.getStructuringElement(cv2.MORPH_RECT,( 15,15 ),( 0, 0))
+	new_im = cv2.dilate(new_im,dilate)
+
+	out = cv2.bitwise_and(new_im,thres)
+
+	cv2.imshow("XYYZZZ",out)
 	cv2.waitKey(0)
