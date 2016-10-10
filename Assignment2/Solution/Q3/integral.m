@@ -48,8 +48,8 @@ y(:,:,1) = imfilter(integralR,k)
 y(:,:,2) = imfilter(integralG,k)
 y(:,:,3) = imfilter(integralB,k)
 
-imwrite(y,'double.png')
+%imwrite(y,'double.png')
 
-%figure; imshow(x,[]);
+figure; imshow(x,[]);
 
 %imwrite(x,'inverseBLF.png')
