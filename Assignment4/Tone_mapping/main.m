@@ -14,4 +14,5 @@ for i = 1:length(c)
   final_image(:,:,2) = G
   final_image(:,:,3) = B
   imshow(final_image)
+  imwrite(final_image,c{i},'png')
 endfor
