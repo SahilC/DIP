@@ -1,3 +1,4 @@
+pkg load image;
 c = [{'AtriumNight.pfm'},{'church.pfm'},{'doll_doll.pfm'},{'lips.pfm'},{'rosette.pfm'}]
 for i = 1:length(c)
   im = getpfmraw(c{i});

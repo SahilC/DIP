@@ -2,6 +2,15 @@ function [A] = reinHardTonesLocal(im,key,phi)
   alpha = 1/(2*sqrt(2))
   v1 = zeros(size(im,1), size(im,2), 8);
   v = zeros(size(im,1), size(im,2), 8);
+  
+  shape = size(im);
+  N = shape(1)*shape(2);
+  
+  Lr = exp(sum(log(im(:) + 0.01))/N)
+  ke = 0.18*4**((2*log2(Lr) - log2(0.001+min(im(:))) - log2(max(im(:))))/(log2(max(im(:))) - log2(0.001+min(im(:)))))
+  
+  
+  im = ((ke/Lr).*im)
   for scale = 1:(8+1)
     s = 1.6^scale;
     s_alpha = alpha*s;
@@ -14,7 +23,7 @@ function [A] = reinHardTonesLocal(im,key,phi)
   endfor
   
   for scale = 1:8
-    v(:,:,scale) = abs(v1(:,:,scale) - v1(:,:,scale+1)) ./ (((2^phi)*key)/scale^2 + v1(:,:,scale));
+    v(:,:,scale) = abs(v1(:,:,scale) - v1(:,:,scale+1)) ./ (((2^phi)*ke)/scale^2 + v1(:,:,scale));
   endfor
   
   scales = 8*ones(size(v,1),size(v,2));
