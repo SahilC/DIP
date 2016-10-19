@@ -55,5 +55,5 @@ function [A] = reinHardTonesLocal(im,key,phi)
         end
   end
   
-  A = im./(1+lum_final);
+  A = (im./(1+lum_final))^(1/2.2);
   #imshow(A);
